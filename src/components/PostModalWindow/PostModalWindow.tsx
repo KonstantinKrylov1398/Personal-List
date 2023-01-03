@@ -9,6 +9,8 @@ import React, {
 import { useNavigate } from "react-router-dom";
 import style from "./postmodalwindow.less";
 import InputMask from "react-input-mask";
+import { SortArray } from "../../Redux/actionSortArray";
+import { useDispatch } from "react-redux";
 export function PostModalWindow() {
   const [error, setError] = useState(false);
   const [name, setName] = useState("");
@@ -18,6 +20,7 @@ export function PostModalWindow() {
   const [archive, setArchive] = useState(false);
   const navigate = useNavigate();
   const button: any = useRef(null);
+  const dispatch = useDispatch();
   useEffect(() => {
     if (
       name.length === 0 ||
@@ -42,7 +45,11 @@ export function PostModalWindow() {
         role: role,
         isArchive: archive,
       })
-      .then((res) => console.log(res.data));
+      .then((res) =>
+        axios.get("http://localhost:3000/Personals").then((res) => {
+          dispatch(SortArray(res.data));
+        })
+      );
 
   const onChangeName = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);

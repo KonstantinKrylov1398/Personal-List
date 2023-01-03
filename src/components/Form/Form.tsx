@@ -5,8 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { filterArchiveArray } from "../../utils/filterArchiveArray";
 import { filterPostArray } from "../../utils/filterPostArray";
 import { sortArray } from "../../utils/sortPersonals";
-import { useSelector } from "react-redux";
-import { mystate } from "../../Redux/Reducer";
 import axios from "axios";
 import { SortArray } from "../../Redux/actionSortArray";
 export interface personaldatatype {
@@ -32,7 +30,7 @@ export function Form() {
       setSort(res.data);
       dispatch(SortArray(res.data));
     });
-  }, [data]);
+  }, []);
   return (
     <div>
       <button onClick={() => navigate("/post")} className={style.post_button}>

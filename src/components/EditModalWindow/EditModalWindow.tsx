@@ -11,8 +11,9 @@ import { useNavigate } from "react-router-dom";
 import style from "./editmodalwindow.less";
 import InputMask from "react-input-mask";
 import { mystate } from "../../Redux/Reducer";
+import { SortArray } from "../../Redux/actionSortArray";
+import { useDispatch } from "react-redux";
 export function EditModalWindow() {
-  const setArray: any = useSelector((state: mystate) => state.setArray);
   const [error, setError] = useState(false);
   const personalData = useSelector((state: mystate) => state.personalData);
   const [name, setName] = useState(personalData.name);
@@ -20,6 +21,7 @@ export function EditModalWindow() {
   const [birthday, setBirthday] = useState(personalData.birthday);
   const [role, setRole] = useState(personalData.role);
   const [archive, setArchive] = useState(personalData.isArchive);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const button: any = useRef(null);
   const onChangeData = () =>
@@ -32,7 +34,11 @@ export function EditModalWindow() {
         role: role,
         isArchive: archive,
       })
-      .then((res) => console.log(res.data));
+      .then((res) =>
+        axios.get("http://localhost:3000/Personals").then((res) => {
+          dispatch(SortArray(res.data));
+        })
+      );
 
   const onChangeName = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
