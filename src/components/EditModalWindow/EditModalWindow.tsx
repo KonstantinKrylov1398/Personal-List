@@ -12,6 +12,7 @@ import style from "./editmodalwindow.less";
 import InputMask from "react-input-mask";
 import { mystate } from "../../Redux/Reducer";
 export function EditModalWindow() {
+  const setArray: any = useSelector((state: mystate) => state.setArray);
   const [error, setError] = useState(false);
   const personalData = useSelector((state: mystate) => state.personalData);
   const [name, setName] = useState(personalData.name);
@@ -21,23 +22,9 @@ export function EditModalWindow() {
   const [archive, setArchive] = useState(personalData.isArchive);
   const navigate = useNavigate();
   const button: any = useRef(null);
-  useEffect(() => {
-    if (
-      name.length === 0 ||
-      phone.length === 0 ||
-      birthday.length === 0 ||
-      role === "Выберите должность сотрудника"
-    ) {
-      button.current.disabled = true;
-      setError(true);
-    } else {
-      button.current.disabled = false;
-      setError(false);
-    }
-  }, [name, phone, birthday, role]);
   const onChangeData = () =>
     axios
-      .patch(`http://localhost:3000/Personals/${personalData.id}`, {
+      .put(`http://localhost:3000/Personals/${personalData.id}`, {
         id: personalData.id,
         name: name,
         phone: phone,
@@ -45,7 +32,7 @@ export function EditModalWindow() {
         role: role,
         isArchive: archive,
       })
-      .then((res) => console.log(res));
+      .then((res) => console.log(res.data));
 
   const onChangeName = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -62,13 +49,25 @@ export function EditModalWindow() {
   const onChangeArchive = (event: ChangeEvent<HTMLInputElement>) => {
     setArchive(event.target.checked);
   };
-
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(onChangeData());
     navigate("/");
+    onChangeData();
   };
-
+  useEffect(() => {
+    if (
+      name.length === 0 ||
+      phone.length === 0 ||
+      birthday.length === 0 ||
+      role === "Выберите должность сотрудника"
+    ) {
+      button.current.disabled = true;
+      setError(true);
+    } else {
+      button.current.disabled = false;
+      setError(false);
+    }
+  }, [name, phone, birthday, role]);
   return (
     <div className={style.edit}>
       <button className={style.edit_button} onClick={() => navigate("/")}>

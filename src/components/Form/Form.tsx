@@ -2,10 +2,13 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import style from "./form.less";
 import { useNavigate } from "react-router-dom";
-import { getPersonal } from "../../Redux/thunk";
 import { filterArchiveArray } from "../../utils/filterArchiveArray";
 import { filterPostArray } from "../../utils/filterPostArray";
 import { sortArray } from "../../utils/sortPersonals";
+import { useSelector } from "react-redux";
+import { mystate } from "../../Redux/Reducer";
+import axios from "axios";
+import { SortArray } from "../../Redux/actionSortArray";
 export interface personaldatatype {
   id: number;
   name: string;
@@ -19,12 +22,17 @@ export function Form() {
   const [filterArchive, setFilterArchive] = useState<personaldatatype[]>([]);
   const [filterPost, setFilterPost] = useState<personaldatatype[]>([]);
   const [sort, setSort] = useState<personaldatatype[]>([]);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const dispatch: any = useDispatch();
   useEffect(() => {
-    dispatch(getPersonal(setData, setFilterArchive, setFilterPost, setSort));
-  }, []);
-
+    axios.get("http://localhost:3000/Personals").then((res) => {
+      setData(res.data);
+      setFilterArchive(res.data);
+      setFilterPost(res.data);
+      setSort(res.data);
+      dispatch(SortArray(res.data));
+    });
+  }, [data]);
   return (
     <div>
       <button onClick={() => navigate("/post")} className={style.post_button}>
@@ -34,7 +42,7 @@ export function Form() {
         <select
           className={style.form_select}
           onChange={(event: ChangeEvent<HTMLSelectElement>) => {
-            console.log(sortArray(event.target.value, sort, dispatch));
+            sortArray(event.target.value, sort, dispatch);
           }}
           name="Сортировать сотрудников по:"
         >

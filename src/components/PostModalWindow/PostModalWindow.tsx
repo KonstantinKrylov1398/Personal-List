@@ -65,7 +65,6 @@ export function PostModalWindow() {
     onPostData();
     navigate("/");
   };
-
   return (
     <div className={style.post}>
       <button className={style.post_button} onClick={() => navigate("/")}>

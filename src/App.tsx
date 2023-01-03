@@ -1,7 +1,8 @@
+import axios from "axios";
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { EditModalWindow } from "./components/EditModalWindow";
-import { Form } from "./components/Form";
+import { Form, personaldatatype } from "./components/Form";
 import { Personals } from "./components/Personal";
 import { PostModalWindow } from "./components/PostModalWindow";
 import "./main.global.less";

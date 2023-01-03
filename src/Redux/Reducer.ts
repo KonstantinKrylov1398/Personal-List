@@ -2,6 +2,7 @@ import { Reducer } from "redux";
 import { personaldatatype } from "../components/Form";
 import { PERSONAL_DATA } from "./actionPersonalData";
 import { SORT_ARRAY } from "./actionSortArray";
+import { SET_ARRAY } from "./actionSetArray";
 const myState = {
   sortArray: [],
   personalData: {
@@ -12,10 +13,12 @@ const myState = {
     phone: "",
     birthday: "",
   },
+  setArray: () => {},
 };
 export type mystate = {
   sortArray: personaldatatype[];
   personalData: personaldatatype;
+  setArray: () => void;
 };
 export const myReducer: Reducer<mystate> = (state = myState, action) => {
   switch (action.type) {
@@ -28,6 +31,11 @@ export const myReducer: Reducer<mystate> = (state = myState, action) => {
       return {
         ...state,
         personalData: action.array,
+      };
+    case SET_ARRAY:
+      return {
+        ...state,
+        setArray: action.array,
       };
     default:
       return state;
